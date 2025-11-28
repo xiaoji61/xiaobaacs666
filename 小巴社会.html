@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎小巴 - 客服审签系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);
+            color: #1d3557;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #1d3557;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #457b9d;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #a8dadc;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1d3557;
+        }
+        
+        .card p {
+            color: #457b9d;
+            font-size: 1rem;
+        }
+        
+        .details {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+        }
+        
+        .details.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #a8dadc;
+        }
+        
+        .detail-header h2 {
+            color: #1d3557;
+            font-size: 1.8rem;
+        }
+        
+        .close-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            background: #d62828;
+            transform: scale(1.1);
+        }
+        
+        .form-container {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .form-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1d3557;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #a8dadc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #457b9d;
+            box-shadow: 0 0 0 2px rgba(69, 123, 157, 0.2);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #457b9d;
+        }
+        
+        .checkbox-item label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #457b9d;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d3557;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #a8dadc;
+            color: #1d3557;
+        }
+        
+        .btn-secondary:hover {
+            background: #8ecae6;
+            transform: translateY(-2px);
+        }
+        
+        .service-info {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .service-label {
+            font-size: 0.9rem;
+            color: #457b9d;
+            margin-bottom: 5px;
+        }
+        
+        .service-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1d3557;
+        }
+        
+        .status-online {
+            color: #2a9d8f;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>欢迎小巴</h1>
+            <p>客服审签系统 - 为您提供专业服务</p>
+        </header>
+        
+        <div class="service-info">
+            <div class="service-item">
+                <span class="service-label">客服工号</span>
+                <span class="service-value">9527</span>
+            </div>
+            <div class="service-item">
+                <span class="service-label">客服昵称</span>
+                <span class="service-value">小助手</span>
+            </div>
+            <div class="service-item">
+                <span class="service-label">当前状态</span>
+                <span class="service-value status-online">[在线]</span>
+            </div>
+        </div>
+        
+        <div class="card-grid">
+            <div class="card" id="card-love">
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="恋爱">
+                <h3>巴的恋爱</h3>
+                <p>查看小巴的恋爱相关信息</p>
+            </div>
+            
+            <div class="card" id="card-creepy">
+                <img src="https://images.unsplash.com/photo-1517816428104-797678c7cf0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="猥琐">
+                <h3>巴的猥琐</h3>
+                <p>查看小巴的趣味爱好和申请事项</p>
+            </div>
+            
+            <div class="card" id="card-account">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="开户">
+                <h3>给巴开户</h3>
+                <p>填写小巴的详细个人信息</p>
+            </div>
+        </div>
+        
+        <div class="details" id="details-love">
+            <div class="detail-header">
+                <h2>巴的恋爱信息</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>恋爱对象</label>
+                    <input type="text" value="蕊蕊" readonly>
+                </div>
+                <div class="form-group">
+                    <label>身高</label>
+                    <input type="text" value="188" readonly>
+                </div>
+                <div class="form-group">
+                    <label>体重</label>
+                    <input type="text" value="1" readonly>
+                </div>
+            </div>
+        </div>
+        
+        <div class="details" id="details-creepy">
+            <div class="detail-header">
+                <h2>巴的猥琐信息</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>兴趣爱好</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hobby1" disabled>
+                            <label for="hobby1">体育运动</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hobby2" disabled>
+                            <label for="hobby2">电子游戏</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hobby3" disabled>
+                            <label for="hobby3">读书看报</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hobby4" checked disabled>
+                            <label for="hobby4">其他：看奶</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>申请事项</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="apply1" disabled>
+                            <label for="apply1">账号解封</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="apply2" disabled>
+                            <label for="apply2">实名认证</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="apply3" disabled>
+                            <label for="apply3">信息修改</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="apply4" checked disabled>
+                            <label for="apply4">其他：看奶</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>交规厚度</label>
+                    <input type="text" value="?" readonly>
+                </div>
+            </div>
+        </div>
+        
+        <div class="details" id="details-account">
+            <div class="detail-header">
+                <h2>用户审签申请表</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" value="阿巴" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>性别</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gender1" disabled>
+                            <label for="gender1">男</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gender2" disabled>
+                            <label for="gender2">女</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gender3" checked disabled>
+                            <label for="gender3">保密</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="text" value="2000年1月1日" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>身份证号</label>
+                    <input type="text" value="356969788546321896" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="tel" value="13400860625" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>电子邮箱</label>
+                    <input type="email" value="1917760160@qq.com" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>申请人签字</label>
+                    <input type="text" value="阿巴" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>申请日期</label>
+                    <input type="text" value="2025年11月28日" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>申请具体描述</label>
+                    <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #a8dadc; border-radius: 6px;" readonly></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary">取消</button>
+                    <button class="btn btn-primary">提交申请</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+        const details = document.querySelectorAll('.details');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                details.forEach(detail => {
+                    detail.classList.remove('active');
+                });
+                
+                const cardId = card.id;
+                if (cardId === 'card-love') {
+                    document.getElementById('details-love').classList.add('active');
+                } else if (cardId === 'card-creepy') {
+                    document.getElementById('details-creepy').classList.add('active');
+                } else if (cardId === 'card-account') {
+                    document.getElementById('details-account').classList.add('active');
+                }
+                
+                document.querySelector('.details.active').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                button.closest('.details').classList.remove('active');
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.card') && !e.target.closest('.details')) {
+                details.forEach(detail => {
+                    detail.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
